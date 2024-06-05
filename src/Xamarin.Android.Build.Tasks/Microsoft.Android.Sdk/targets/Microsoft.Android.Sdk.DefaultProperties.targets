@@ -45,6 +45,9 @@
 
     <!-- Mono components -->
     <AndroidEnableProfiler Condition=" '$(AndroidEnableProfiler)' == ''">false</AndroidEnableProfiler>
+
+    <!-- Native runtime -->
+    <_AndroidEnableNativeRuntimeLinking Condition=" '$(_AndroidEnableNativeRuntimeLinking)' == '' and '$(AndroidIncludeDebugSymbols)' != 'true' ">true</_AndroidEnableNativeRuntimeLinking>
   </PropertyGroup>
 
   <!--  User-facing configuration-specific defaults -->
