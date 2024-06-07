@@ -724,5 +724,12 @@ namespace Xamarin.Android.Tasks
 				}
 			}
 		}
+
+		public static string QuoteFileNameArgument (string fileName)
+		{
+			var builder = new CommandLineBuilder ();
+			builder.AppendFileNameIfNotNull (fileName);
+			return builder.ToString ();
+		}
 	}
 }
