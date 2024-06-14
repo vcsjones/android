@@ -357,6 +357,7 @@ namespace Xamarin.Android.Tasks
 				JNIEnvRegisterJniNativesToken = jnienv_registerjninatives_method_token,
 				JniRemappingReplacementTypeCount = jniRemappingNativeCodeInfo == null ? 0 : jniRemappingNativeCodeInfo.ReplacementTypeCount,
 				JniRemappingReplacementMethodIndexEntryCount = jniRemappingNativeCodeInfo == null ? 0 : jniRemappingNativeCodeInfo.ReplacementMethodIndexEntryCount,
+				ZipAlignmentMask = 3, // TODO: parametrize via Task arguments
 				MarshalMethodsEnabled = EnableMarshalMethods,
 				IgnoreSplitConfigs = ShouldIgnoreSplitConfigs (),
 			};
