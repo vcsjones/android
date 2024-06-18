@@ -80,6 +80,7 @@ namespace Xamarin.Android.Tasks
 		public string AndroidSequencePointsMode { get; set; }
 		public bool EnableSGenConcurrent { get; set; }
 		public string? CustomBundleConfigFile { get; set; }
+		public int ZipAlignmentPages { get; set; } = 0;
 
 		[Output]
 		public string BuildId { get; set; }
@@ -334,6 +335,13 @@ namespace Xamarin.Android.Tasks
 
 			bool haveRuntimeConfigBlob = !String.IsNullOrEmpty (RuntimeConfigBinFilePath) && File.Exists (RuntimeConfigBinFilePath);
 			var jniRemappingNativeCodeInfo = BuildEngine4.GetRegisteredTaskObjectAssemblyLocal<GenerateJniRemappingNativeCode.JniRemappingNativeCodeInfo> (ProjectSpecificTaskObjectKey (GenerateJniRemappingNativeCode.JniRemappingNativeCodeInfoKey), RegisteredTaskObjectLifetime.Build);
+			int zipAlignment = ZipAlignmentPages != 0 ? ZipAlignmentPages : AndroidZipAlign.DefaultZipAlignment;
+			uint zipAlignmentMask = zipAlignment switch {
+				4 => 3,
+				16 => 15,
+				_ => throw new InvalidOperationException ($"Internal error: unsupported zip page alignment value {ZipAlignmentPages}")
+			};
+
 			var appConfigAsmGen = new ApplicationConfigNativeAssemblyGenerator (environmentVariables, systemProperties, Log) {
 				UsesMonoAOT = usesMonoAOT,
 				UsesMonoLLVM = EnableLLVM,
@@ -357,7 +365,7 @@ namespace Xamarin.Android.Tasks
 				JNIEnvRegisterJniNativesToken = jnienv_registerjninatives_method_token,
 				JniRemappingReplacementTypeCount = jniRemappingNativeCodeInfo == null ? 0 : jniRemappingNativeCodeInfo.ReplacementTypeCount,
 				JniRemappingReplacementMethodIndexEntryCount = jniRemappingNativeCodeInfo == null ? 0 : jniRemappingNativeCodeInfo.ReplacementMethodIndexEntryCount,
-				ZipAlignmentMask = 3, // TODO: parametrize via Task arguments
+				ZipAlignmentMask = zipAlignmentMask,
 				MarshalMethodsEnabled = EnableMarshalMethods,
 				IgnoreSplitConfigs = ShouldIgnoreSplitConfigs (),
 			};

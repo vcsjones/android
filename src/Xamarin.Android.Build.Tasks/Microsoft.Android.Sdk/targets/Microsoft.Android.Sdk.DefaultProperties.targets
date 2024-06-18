@@ -45,6 +45,13 @@
 
     <!-- Mono components -->
     <AndroidEnableProfiler Condition=" '$(AndroidEnableProfiler)' == ''">false</AndroidEnableProfiler>
+
+    <!--
+        Android package (apt/aab) alignment, expressed as the page size in kilobytes.  Two values are supported: 4 and 16.
+        Sometime next year the default value should be changed to 16 since it's going to be a Google Play store requirement for
+        application submissions
+    -->
+    <_AndroidZipAlignment Condition=" '$(_AndroidZipAlignment)' == '' ">16</_AndroidZipAlignment>
   </PropertyGroup>
 
   <!--  User-facing configuration-specific defaults -->

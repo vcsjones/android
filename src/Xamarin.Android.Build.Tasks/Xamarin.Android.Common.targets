@@ -1724,6 +1724,7 @@ because xbuild doesn't support framework reference assemblies.
     UseAssemblyStore="$(AndroidUseAssemblyStore)"
     EnableMarshalMethods="$(_AndroidUseMarshalMethods)"
     CustomBundleConfigFile="$(AndroidBundleConfigurationFile)"
+    ZipAlignmentPages="$(_AndroidZipAlignment)"
   >
     <Output TaskParameter="BuildId" PropertyName="_XamarinBuildId" />
   </GeneratePackageManagerJava>
@@ -2354,7 +2355,8 @@ because xbuild doesn't support framework reference assemblies.
 	<Delete Files="%(ApkAbiFilesSigned.FullPath)" Condition=" '$(AndroidUseApkSigner)' == 'true' "/>
 	<AndroidZipAlign Condition=" '$(AndroidUseApkSigner)' == 'true' "
 		Source="%(ApkAbiFilesIntermediate.Identity)"
-		DestinationDirectory="$(OutDir)"
+    Alignment="$(_AndroidZipAlignment)"
+    DestinationDirectory="$(OutDir)"
 		ToolPath="$(ZipAlignToolPath)"
 		ToolExe="$(ZipalignToolExe)"
 	/>
@@ -2389,7 +2391,8 @@ because xbuild doesn't support framework reference assemblies.
 	<Message Text="Unaligned android package '%(ApkAbiFilesUnaligned.FullPath)'"  Condition=" '$(AndroidUseApkSigner)' != 'True' And '$(AndroidPackageFormat)' != 'aab' "/>
 	<AndroidZipAlign Condition=" '$(AndroidUseApkSigner)' != 'True' And '$(AndroidPackageFormat)' != 'aab' "
 		Source="%(ApkAbiFilesUnaligned.Identity)"
-		DestinationDirectory="$(OutDir)"
+    Alignment="$(_AndroidZipAlignment)"
+    DestinationDirectory="$(OutDir)"
 		ToolPath="$(ZipAlignToolPath)"
 		ToolExe="$(ZipalignToolExe)"
 	/>
